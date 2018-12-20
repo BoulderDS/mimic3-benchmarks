@@ -6,6 +6,7 @@ import numpy as np
 import os
 import pandas as pd
 import sys
+import gzip
 
 from mimic3benchmark.util import *
 
@@ -45,7 +46,7 @@ def read_icd_diagnoses_table(mimic3_path):
 
 def read_events_table_by_row(mimic3_path, table):
     nb_rows = {'chartevents': 330712484, 'labevents': 27854056, 'outputevents': 4349219}
-    reader = csv.DictReader(open(os.path.join(mimic3_path, table.upper() + '.csv'), 'r'))
+    reader = csv.DictReader(gzip.open(os.path.join(mimic3_path, table.upper() + '.csv.gz'), 'rt'))
     for i, row in enumerate(reader):
         if 'ICUSTAY_ID' not in row:
             row['ICUSTAY_ID'] = ''
