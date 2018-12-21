@@ -52,11 +52,14 @@ def calculate(channel_data, period, sub_period, functions):
 
     L = channel_data[0][0]
     R = channel_data[-1][0]
+    # print(L, R)
     L, R = get_range(L, R, period)
+    # print(L, R)
     L, R = get_range(L, R, sub_period)
-
+    # print(L, R)
     data = [x for (t, x) in channel_data
             if L - 1e-6 < t < R + 1e-6]
+    # print(L, R, data, period, sub_period)
 
     if len(data) == 0:
         return np.full((len(functions, )), np.nan)

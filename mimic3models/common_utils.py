@@ -6,12 +6,13 @@ import os
 import json
 import random
 
-from mimic3models.feature_extractor import extract_features
+from mimic3models import feature_extractor
 
 
 def convert_to_dict(data, header, channel_info):
     """ convert data from readers output in to array of arrays format """
     ret = [[] for i in range(data.shape[1] - 1)]
+    # the first column is just hours
     for i in range(1, data.shape[1]):
         ret[i-1] = [(t, x) for (t, x) in zip(data[:, 0], data[:, i]) if x != ""]
         channel = header[i]
@@ -25,7 +26,7 @@ def extract_features_from_rawdata(chunk, header, period, features):
     with open(os.path.join(os.path.dirname(__file__), "resources/channel_info.json")) as channel_info_file:
         channel_info = json.loads(channel_info_file.read())
     data = [convert_to_dict(X, header, channel_info) for X in chunk]
-    return extract_features(data, period, features)
+    return feature_extractor.extract_features(data, period, features)
 
 
 def read_chunk(reader, chunk_size):
